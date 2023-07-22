@@ -59,17 +59,6 @@ SRCS := $(SRCS2) $(SRCS4)
 
 VPATH := $(SDIR2):$(SDIR4)
 
-CFG_LIB := -L/usr/local/lib \
-		-ldate-tz \
-		-lspdlog \
-		-L/usr/lib \
-		-lfmt \
-		-lmpdec++ \
-		-lmpdec \
-		-ljsoncpp \
-		-L$(GCCDIR)/lib64 \
-		-L$(BOOSTDIR)/lib 
-
 OBJS2=$(addprefix $(OUTDIR)/, $(addsuffix .o, $(basename $(notdir $(SRCS2)))))
 OBJS4=$(addprefix $(OUTDIR)/, $(addsuffix .o, $(basename $(notdir $(SRCS4)))))
 
