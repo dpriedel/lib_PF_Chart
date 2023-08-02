@@ -1,0 +1,7 @@
+
+Debug_lib
+Release_lib
+*.a
+
+.nvim.lua
+
