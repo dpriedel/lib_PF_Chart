@@ -88,9 +88,11 @@ ifeq "$(CFG)" "Release"
 OUTDIR=Release_lib
 
 COMPILE=$(CPP) -c  -x c++  -O3 -std=c++2b -flto -DBOOST_ENABLE_ASSERT_HANDLER -DBOOST_REGEX_STANDALONE -DSPDLOG_USE_STD_FORMAT -DUSE_OS_TZDB -fPIC -o $@ $(CFG_INC) $< -march=native -MMD -MP
-CCOMPILE=$(GCC) -c  -O3  -fPIC -o $@ $(CFG_INC) $< -march=native -MMD -MP
+# COMPILE=$(CPP) -c  -x c++  -O3 -std=c++2b -DBOOST_ENABLE_ASSERT_HANDLER -DBOOST_REGEX_STANDALONE -DSPDLOG_USE_STD_FORMAT -DUSE_OS_TZDB -fPIC -o $@ $(CFG_INC) $< -march=native -MMD -MP
+CCOMPILE=$(GCC) -c  -O3 -flto -fPIC -o $@ $(CFG_INC) $< -march=native -MMD -MP
 
 LINK=ar -flto=auto -rs  "$(OUTFILE)" $(OBJS)
+# LINK=ar -rs  "$(OUTFILE)" $(OBJS)
 
 endif #	RELEASE configuration
 
