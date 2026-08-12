@@ -27,6 +27,8 @@ UTILITYDIR := ${HOME}/projects/PF_Project/common_utilities
 CPP := $(GCCDIR)/bin/g++
 GCC := $(GCCDIR)/bin/gcc
 
+MKFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+
 # If no configuration is specified, "Debug" will be used
 ifndef "CFG"
 	CFG := Debug
@@ -34,7 +36,7 @@ endif
 
 #	common definitions
 
-OUTFILE := libPF_Chart.a
+OUTFILE := $(MKFILE_DIR)/libPF_Chart.a
 
 CFG_INC := -I${HOME}/projects/PF_Project/point_figure/src \
 	-I$(GTESTDIR) \
@@ -44,7 +46,7 @@ CFG_INC := -I${HOME}/projects/PF_Project/point_figure/src \
 # SDIR1 := .
 # SRCS1 := $(SDIR1)/Main.cpp
 
-SDIR2 := ../point_figure/src
+SDIR2 := $(MKFILE_DIR)/../point_figure/src
 SRCS2 := $(SDIR2)/Boxes.cpp \
 		$(SDIR2)/PF_Column.cpp \
 		$(SDIR2)/PF_Chart.cpp \
@@ -73,7 +75,7 @@ DEPS=$(OBJS:.o=.d)
 #
 ifeq "$(CFG)" "Debug"
 
-OUTDIR=Debug_lib
+OUTDIR=$(MKFILE_DIR)/Debug_lib
 
 COMPILE=$(CPP) -c  -x c++  -O0  -g3 -std=c++26 -D_DEBUG -DBOOST_ENABLE_ASSERT_HANDLER -DSPDLOG_USE_STD_FORMAT -DUSE_OS_TZDB -DSHOW_STRACE -fPIC -o $@ $(CFG_INC) $< -march=native -mtune=native -MMD -MP
 CCOMPILE=$(GCC) -c  -O0  -g3 -D_DEBUG -fPIC -o $@ $(CFG_INC) $< -march=native -mtune=native -MMD -MP
@@ -87,7 +89,7 @@ endif #	DEBUG configuration
 #
 ifeq "$(CFG)" "Release"
 
-OUTDIR=Release_lib
+OUTDIR=$(MKFILE_DIR)/Release_lib
 
 COMPILE=$(CPP) -c  -x c++  -O3 -std=c++26 -flto -DBOOST_ENABLE_ASSERT_HANDLER -DSPDLOG_USE_STD_FORMAT -DUSE_OS_TZDB -fPIC -o $@ $(CFG_INC) $< -march=native -mtune=native -MMD -MP
 # COMPILE=$(CPP) -c  -x c++  -O3 -std=c++2b -DBOOST_ENABLE_ASSERT_HANDLER -DBOOST_REGEX_STANDALONE -DSPDLOG_USE_STD_FORMAT -DUSE_OS_TZDB -fPIC -o $@ $(CFG_INC) $< -march=native -MMD -MP
@@ -107,7 +109,7 @@ $(OUTDIR)/%.o : %.cpp
 $(OUTDIR)/%.o : %.c
 	$(CCOMPILE)
 
-$(OUTFILE): $(OUTDIR) $(OBJS2) $(OBJS4)
+$(OUTFILE): $(OBJS2) $(OBJS4) | $(OUTDIR)
 	$(LINK)
 
 -include $(DEPS)
